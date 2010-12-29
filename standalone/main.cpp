@@ -1,5 +1,5 @@
-#include "../include/pinyinime.h"
-#include "../include/dictdef.h"
+#include "pinyinime.h"
+#include "dictdef.h"
 #include <iostream>
 #include <iconv.h>
 #include <string>
@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
 		}
 		int cand;
 		cin >> cand;
-		if (cand == -1)
-			im_delsearch();
+//		if (cand == -1)
+//			im_delsearch();
 		im_choose(cand);
 	}
 	im_close_decoder();
