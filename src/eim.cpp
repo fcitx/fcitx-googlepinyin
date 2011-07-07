@@ -1,4 +1,4 @@
-b/***************************************************************************
+/***************************************************************************
  *   Copyright (C) 2010~2010 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
@@ -44,10 +44,10 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-FcitxIMClass ime = {
-    FcitxGooglePinyinCreate,
-    FcitxGooglePinyinDestroy
-};
+    FcitxIMClass ime = {
+        FcitxGooglePinyinCreate,
+        FcitxGooglePinyinDestroy
+    };
 #ifdef __cplusplus
 }
 #endif
@@ -70,6 +70,42 @@ void FcitxGooglePinyinReset (void* arg)
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
     ime_pinyin::im_reset_search();
     googlepinyin->buf[0] = '\0';
+    googlepinyin->CursorPos = 0;
+}
+
+/**
+ * @brief googlepinyin engine is crapy, try search carefully.
+ */
+void TryBestSearch(FcitxGooglePinyin* googlepinyin)
+{
+    FcitxInstance* instance = googlepinyin->owner;
+    FcitxInputState* input = &instance->input;
+    int maxCand = ConfigGetMaxCandWord(&instance->config);
+    size_t len;
+    size_t buflen = strlen(googlepinyin->buf);
+    ime_pinyin::im_get_sps_str(&len);
+    if (len >= buflen)
+    {
+        input->iCandWordCount = ime_pinyin::im_search(googlepinyin->buf, buflen);
+        input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand ;
+    }
+    else {
+        while (len < buflen)
+        {
+            input->iCandWordCount = ime_pinyin::im_search(googlepinyin->buf, len);
+            size_t new_len;
+            ime_pinyin::im_get_sps_str(&new_len);
+            if (new_len < len)
+            {
+                len = new_len;
+                break;
+            }
+            if (new_len >= len)
+                len ++;
+        }
+        input->iCandWordCount = ime_pinyin::im_search(googlepinyin->buf, len);
+    }
+    input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand ;
 }
 
 /**
@@ -93,12 +129,21 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
         {
             if (strlen(googlepinyin->buf) < MAX_GOOGLEPINYIN_INPUT)
             {
-                char key[2];
-                key[0] = (char) (sym & 0xff);
-                key[1] = 0;
-                strcat(googlepinyin->buf, key);
-                input->iCandWordCount = ime_pinyin::im_search(googlepinyin->buf, strlen(googlepinyin->buf));
-                input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand ;
+                size_t len = strlen(googlepinyin->buf);
+                if (googlepinyin->buf[googlepinyin->CursorPos] != 0)
+                {
+                    memmove(googlepinyin->buf + googlepinyin->CursorPos + 1, googlepinyin->buf + googlepinyin->CursorPos, len - googlepinyin->CursorPos);
+                }
+                googlepinyin->buf[len + 1] = 0;
+                googlepinyin->buf[googlepinyin->CursorPos] = (char) (sym & 0xff);
+                googlepinyin->CursorPos ++;
+                TryBestSearch(googlepinyin);
+                ime_pinyin::im_get_sps_str(&len);
+                if (len == 0 && strlen(googlepinyin->buf) == 1)
+                {
+                    FcitxGooglePinyinReset(googlepinyin);
+                    return IRV_TO_PROCESS;
+                }
                 return FcitxGooglePinyinGetCandWords(googlepinyin, SM_FIRST);
             }
             else
@@ -106,6 +151,11 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
         }
         else if (IsHotKeyDigit(sym, state) || IsHotKey(sym, state, FCITX_SPACE))
         {
+            size_t len = strlen(googlepinyin->buf);
+            if (len == 0)
+                return IRV_TO_PROCESS;
+            
+            
             int iKey = 0;
             if (IsHotKey(sym, state, FCITX_SPACE))
                 iKey = 0;
@@ -122,30 +172,110 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
             }
             else
             {
-                ime_pinyin::im_choose(iKey + input->iCurrentCandPage * maxCand);
-                input->iCandWordCount = ime_pinyin::im_search(googlepinyin->buf, strlen(googlepinyin->buf));
+                input->iCandWordCount = ime_pinyin::im_choose(iKey + input->iCurrentCandPage * maxCand);
                 input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand ;
                 return FcitxGooglePinyinGetCandWords(googlepinyin, SM_FIRST);
             }
         }
-        
+
     }
-    else if (IsHotKey(sym, state, FCITX_BACKSPACE))
+    if (IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_DELETE))
     {
         if (strlen(googlepinyin->buf) > 0)
         {
-            if (ime_pinyin::im_get_fixed_len() == 0)
+            if (ime_pinyin::im_get_fixed_len() != 0 && IsHotKey(sym, state, FCITX_BACKSPACE))
             {
-                googlepinyin->buf[strlen(googlepinyin->buf) - 1] = 0;
-                input->iCandWordCount = ime_pinyin::im_search(googlepinyin->buf, strlen(googlepinyin->buf));
+                input->iCandWordCount = ime_pinyin::im_cancel_last_choice();
                 input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand ;
             }
             else
-                ime_pinyin::im_cancel_last_choice();
-            return FcitxGooglePinyinGetCandWords(googlepinyin, SM_FIRST);   
+            {
+                if (IsHotKey(sym, state, FCITX_BACKSPACE))
+                {
+                    if (googlepinyin->CursorPos > 0)
+                        googlepinyin->CursorPos -- ;
+                    else
+                        return IRV_DO_NOTHING;
+                }
+                size_t len = strlen(googlepinyin->buf);
+                if (googlepinyin->CursorPos == len)
+                    return IRV_DO_NOTHING;
+                memmove(googlepinyin->buf + googlepinyin->CursorPos, googlepinyin->buf + googlepinyin->CursorPos + 1, len - googlepinyin->CursorPos - 1);
+                googlepinyin->buf[strlen(googlepinyin->buf) - 1] = 0;
+                TryBestSearch(googlepinyin);
+            }
+            return FcitxGooglePinyinGetCandWords(googlepinyin, SM_FIRST);
         }
         else
             return IRV_TO_PROCESS;
+    }
+    else
+    {
+        
+        if (strlen(googlepinyin->buf) > 0)
+        {
+            if (IsHotKey(sym, state, FCITX_LEFT))
+            {
+                const ime_pinyin::char16* start = 0;
+                size_t start_pos_len = ime_pinyin::im_get_spl_start_pos(start);
+                size_t fixed_len = ime_pinyin::im_get_fixed_len();
+                if (googlepinyin->CursorPos > 0)
+                {
+                    if ( googlepinyin->CursorPos == start[fixed_len])
+                    {
+                        input->iCandWordCount = ime_pinyin::im_cancel_last_choice();
+                        input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand ;
+                        return FcitxGooglePinyinGetCandWords(googlepinyin, SM_FIRST);
+                    }
+                    else
+                    {
+                        googlepinyin->CursorPos -- ;
+                        FcitxGooglePinyinUpdateCand(googlepinyin);
+                        return IRV_DISPLAY_CANDWORDS;
+                    }
+                }
+
+                return IRV_DO_NOTHING;
+            }
+            else if (IsHotKey(sym, state, FCITX_RIGHT))
+            {
+                size_t len = strlen(googlepinyin->buf);
+                if (googlepinyin->CursorPos < len)
+                {
+                    googlepinyin->CursorPos ++ ;
+                    FcitxGooglePinyinUpdateCand(googlepinyin);
+                    return IRV_DISPLAY_CANDWORDS;
+                }
+                return IRV_DO_NOTHING;
+            }
+            else if (IsHotKey(sym, state, FCITX_HOME))
+            {
+                const ime_pinyin::char16* start = 0;
+                size_t start_pos_len = ime_pinyin::im_get_spl_start_pos(start);
+                size_t fixed_len = ime_pinyin::im_get_fixed_len();
+                if ( googlepinyin->CursorPos != start[fixed_len])
+                {
+                    googlepinyin->CursorPos = start[fixed_len];
+                    FcitxGooglePinyinUpdateCand(googlepinyin);
+                    return IRV_DISPLAY_CANDWORDS;
+                }
+                return IRV_DO_NOTHING;
+            }
+            else if (IsHotKey(sym, state, FCITX_END))
+            {
+                size_t len = strlen(googlepinyin->buf);
+                if (googlepinyin->CursorPos != len)
+                {
+                    googlepinyin->CursorPos = len ;
+                    FcitxGooglePinyinUpdateCand(googlepinyin);
+                    return IRV_DISPLAY_CANDWORDS;
+                }
+                return IRV_DO_NOTHING;
+            }
+        }
+        else {
+            return IRV_TO_PROCESS;
+        }
     }
     return IRV_TO_PROCESS;
 }
@@ -159,13 +289,10 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
     int endCand = maxCand * input->iCurrentCandPage + maxCand;
     if (endCand > input->iCandWordCount)
         endCand = input->iCandWordCount;
-    
+
     size_t len = 0;
-    ime_pinyin::im_get_sps_str(&len);
-    strncpy(googlepinyin->buf, ime_pinyin::im_get_sps_str(&len), len);
-    googlepinyin->buf[len] = 0;
     FcitxLog(DEBUG, "len: %lu", len);
-    
+
     SetMessageCount(GetMessageUp(instance), 0);
     if (googlepinyin->buf[0] != '\0')
     {
@@ -177,23 +304,48 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
         ime_pinyin::char16* p = ime_pinyin::im_get_candidate(0, googlepinyin->retbuf, RET_BUF_LEN);
         iconv(googlepinyin->conv, (char**) &p, &fixed_len, &pp, &bufsize);
         googlepinyin->ubuf[UTF8_BUF_LEN - bufsize] = 0;
-        
+
         AddMessageAtLast(GetMessageUp(instance), MSG_INPUT, "%s", googlepinyin->ubuf);
+        int remainPos = googlepinyin->CursorPos - start[ime_pinyin::im_get_fixed_len()];
+        if (remainPos < 0)
+            googlepinyin->CursorPos = start[ime_pinyin::im_get_fixed_len()];
         input->iCursorPos = strlen(googlepinyin->ubuf);
         for (int i = ime_pinyin::im_get_fixed_len();
-             i < start_pos_len;
-             i ++)
+                i < start_pos_len;
+                i ++)
         {
             char pybuf[ime_pinyin::kMaxPinyinSize + 2]; /* py */
             const char* pystr = ime_pinyin::im_get_sps_str(&len);
             strncpy(pybuf, pystr + start[i], start[i + 1] - start[i]);
             pybuf[  start[i + 1] - start[i] ] = 0;
-            input->iCursorPos += start[i + 1] - start[i];
+            if (remainPos >= 0)
+            {
+                if (remainPos < start[i + 1] - start[i])
+                    input->iCursorPos += remainPos;
+                else
+                    input->iCursorPos += start[i + 1] - start[i];
+            }
+            remainPos -= start[i + 1] - start[i];
+
             AddMessageAtLast(GetMessageUp(instance), MSG_CODE, pybuf );
             if (i != start_pos_len - 1)
             {
                 MessageConcatLast(GetMessageUp(instance), " ");
+                if (remainPos >= 0)
+                    input->iCursorPos += 1;
+            }
+        }
+        if (strlen(googlepinyin->buf) > len)
+        {
+            MessageConcatLast(GetMessageUp(instance), " ");
+            AddMessageAtLast(GetMessageUp(instance), MSG_CODE, googlepinyin->buf + start[start_pos_len] );
+
+            if (remainPos >= 0)
+            {
                 input->iCursorPos += 1;
+                if (remainPos > strlen(googlepinyin->buf + start[start_pos_len]))
+                    remainPos = strlen(googlepinyin->buf + start[start_pos_len]);
+                input->iCursorPos += remainPos;
             }
         }
     }
@@ -201,19 +353,19 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
     input->iCodeInputCount = strlen(googlepinyin->buf);
     instance->bShowCursor = true;
     SetMessageCount(GetMessageDown(instance), 0);
-    
+
     int index = 0;
     for (int i = startCand ;i < endCand ; i ++, index ++)
     {
         GetCCandString(googlepinyin, i);
-        
+
         char str[3] = { '\0', '\0', '\0' };
         if ( ConfigGetPointAfterNumber(&instance->config)) {
             str[1] = '.';
             str[2] = '\0';
         } else
             str[1] = '\0';
-        
+
         if (i == 9)
             str[0] = '0';
         else
@@ -223,7 +375,7 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
         MSG_TYPE iType = MSG_OTHER;
 
         AddMessageAtLast(GetMessageDown(instance), iType, "%s", googlepinyin->ubuf);
-        
+
         if (i != (input->iCandWordCount - 1)) {
             MessageConcatLast(GetMessageDown(instance), " ");
         }
@@ -251,36 +403,39 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords(void* arg, SEARCH_MODE searchMo
     FcitxInputState* input = &instance->input;
     switch (searchMode)
     {
-        case SM_FIRST:
-            input->iCurrentCandPage = 0;
-            break;
-        case SM_NEXT:
-            if (!input->iCandPageCount)
-                return IRV_TO_PROCESS;
-            if (input->iCurrentCandPage == input->iCandPageCount)
-                return IRV_DO_NOTHING;
+    case SM_FIRST:
+        input->iCurrentCandPage = 0;
+        break;
+    case SM_NEXT:
+        if (!input->iCandPageCount)
+            return IRV_TO_PROCESS;
+        if (input->iCurrentCandPage == input->iCandPageCount)
+            return IRV_DO_NOTHING;
 
-            input->iCurrentCandPage++;
-            break;
-        case SM_PREV:
-            if (!input->iCandPageCount)
-                return IRV_TO_PROCESS;
-            if (!input->iCurrentCandPage)
-                return IRV_DO_NOTHING;
+        input->iCurrentCandPage++;
+        break;
+    case SM_PREV:
+        if (!input->iCandPageCount)
+            return IRV_TO_PROCESS;
+        if (!input->iCurrentCandPage)
+            return IRV_DO_NOTHING;
 
-            input->iCurrentCandPage--;
-            break;
+        input->iCurrentCandPage--;
+        break;
     }
     if (DecodeIsDone(googlepinyin))
-    {            
+    {
         GetCCandString(googlepinyin, 0);
+        size_t len;
+        ime_pinyin::im_get_sps_str(&len);
         strcpy(GetOutputString(input), googlepinyin->ubuf);
+        strcat(GetOutputString(input), googlepinyin->buf + len);
         return IRV_GET_CANDWORDS;
     }
     FcitxGooglePinyinUpdateCand(googlepinyin);
     if (googlepinyin->buf[0] == '\0')
         return IRV_CLEAN;
-    
+
     return IRV_DISPLAY_CANDWORDS;
 }
 
@@ -303,11 +458,14 @@ char *FcitxGooglePinyinGetCandWord (void* arg, int iIndex)
     }
     else
     {
-        ime_pinyin::im_choose(iIndex + input->iCurrentCandPage * maxCand);        
+        ime_pinyin::im_choose(iIndex + input->iCurrentCandPage * maxCand);
         if (DecodeIsDone(googlepinyin))
-        {            
+        {
             GetCCandString(googlepinyin, 0);
+            size_t len;
+            ime_pinyin::im_get_sps_str(&len);
             strcpy(GetOutputString(input), googlepinyin->ubuf);
+            strcat(GetOutputString(input), googlepinyin->buf + len);
             return GetOutputString(input);
         }
         else
@@ -330,12 +488,12 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
     LoadGooglePinyinConfig(&googlepinyin->config, false);
     char* userDict;
     googlepinyin->owner = instance;
-    
+
     googlepinyin->conv = iconv_open("utf8", "utf16");
     GetXDGFileUser("googlepinyin/userdict_pinyin.dat", NULL, &userDict);
-        
+
     ime_pinyin::im_open_decoder(PKGDATADIR "/googlepinyin/dict_pinyin.dat", userDict);
-    
+
     FcitxRegisterIM(instance,
                     googlepinyin,
                     _("GooglePinyin"),
@@ -349,7 +507,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
                     NULL,
                     ReloadConfigFcitxGooglePinyin,
                     NULL,
-                    googlepinyin->config.iPriority /* TODO: priority */
+                    googlepinyin->config.iPriority
                    );
     return googlepinyin;
 }
@@ -428,7 +586,7 @@ boolean DecodeIsDone(FcitxGooglePinyin* googlepinyin)
     size_t len;
 
     const char* pystr = ime_pinyin::im_get_sps_str(&len);
-    return (strlen(pystr) == start[ime_pinyin::im_get_fixed_len()]);    
+    return (strlen(pystr) == start[ime_pinyin::im_get_fixed_len()]);
 }
 
 void GetCCandString(FcitxGooglePinyin* googlepinyin, int index)

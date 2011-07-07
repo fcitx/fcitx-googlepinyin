@@ -53,6 +53,7 @@ typedef struct FcitxGooglePinyin
     char ubuf[UTF8_BUF_LEN + 1];
     ime_pinyin::char16 retbuf[RET_BUF_LEN];
     ime_pinyin::char16 retbuf2[RET_BUF_LEN];
+    int CursorPos;
 } FcitxGooglePinyin;
 
 __EXPORT_API void* FcitxGooglePinyinCreate(FcitxInstance* instance);
