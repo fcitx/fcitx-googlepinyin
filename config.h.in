@@ -1,0 +1,6 @@
+#define LOCALEDIR "@localedir@"
+#define PACKAGE "@package@"
+#define DATADIR "@prefix@/share"
+#define PKGDATADIR "@pkgdatadir@"
+#define BINDIR "@bindir@"
+#define LIBDIR "@libdir@"

@@ -1,0 +1,15 @@
+fcitx-googlepinyin install instructions
+=================================================
+
+To compile and install, go in the source directory and type:
+mkdir build; cd build
+cmake .. 
+(If you want to install in a different path, use instead:
+cmake .. -DCMAKE_INSTALL_PREFIX=/install/path)
+make
+
+To install, become root if required:
+
+make install
+
+Once installed, you can restart fcitx and it will be enabled by default.

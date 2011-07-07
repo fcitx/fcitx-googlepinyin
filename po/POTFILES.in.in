@@ -1,0 +1,6 @@
+@REL_SOURCE_ROOT@/src/eim.cpp
+@REL_SOURCE_ROOT@/src/eim.h
+@REL_SOURCE_ROOT@/src/handler.cpp
+@REL_SOURCE_ROOT@/src/handler.h
+@REL_SOURCE_ROOT@/src/config.cpp
+data/desc.po

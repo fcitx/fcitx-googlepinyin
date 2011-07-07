@@ -2,7 +2,7 @@ set(GPY_STANDALONE_SRCS
 	main.cpp
 )
 
-include_directories(${PROJECT_SOURCE_DIR}/libgooglepinyin/include)
+include_directories(${GOOGLEPINYIN_INCLUDE_DIRS})
 
 add_executable(gpy_standalone ${GPY_STANDALONE_SRCS})
 

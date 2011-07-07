@@ -18,52 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef EIM_H
-#define EIM_H
+#include "eim.h"
 
-#ifdef __cplusplus
-#define __EXPORT_API extern "C"
-#else
-#define __EXPORT_API
-#endif
-#include <iconv.h>
-
-extern "C" {
-#include <fcitx/ime.h>
-}
-#include <pinyinime.h>
-
-#define RET_BUF_LEN 256
-#define UTF8_BUF_LEN 4096
-#define MAX_GOOGLEPINYIN_INPUT MAX_USER_INPUT
-
-struct FcitxInstance;
-
-typedef struct FcitxGooglePinyinConfig {
-    GenericConfig gconfig;
-    int iPriority;
-} FcitxGooglePinyinConfig;
-
-typedef struct FcitxGooglePinyin
-{
-    FcitxGooglePinyinConfig config;
-    FcitxInstance* owner;
-    iconv_t conv;
-    char buf[MAX_GOOGLEPINYIN_INPUT + 1];
-    char ubuf[UTF8_BUF_LEN + 1];
-    ime_pinyin::char16 retbuf[RET_BUF_LEN];
-    ime_pinyin::char16 retbuf2[RET_BUF_LEN];
-} FcitxGooglePinyin;
-
-__EXPORT_API void* FcitxGooglePinyinCreate(FcitxInstance* instance);
-__EXPORT_API void FcitxGooglePinyinDestroy(void* arg);
-__EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned int state);
-__EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords (void *arg, SEARCH_MODE mode);
-__EXPORT_API char *FcitxGooglePinyinGetCandWord (void *arg, int iIndex);
-__EXPORT_API boolean FcitxGooglePinyinInit(void*);
-__EXPORT_API void ReloadConfigFcitxGooglePinyin(void*);
-
-
-CONFIG_BINDING_DECLARE(FcitxGooglePinyinConfig);
-
-#endif
+/* USE fcitx provided macro to bind config and variable */
+CONFIG_BINDING_BEGIN(FcitxGooglePinyinConfig);
+CONFIG_BINDING_REGISTER("GooglePinyin", "Priority", iPriority);
+CONFIG_BINDING_END();
