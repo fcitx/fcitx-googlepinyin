@@ -87,7 +87,7 @@ void TryBestSearch(FcitxGooglePinyin* googlepinyin)
     if (len >= buflen)
     {
         input->iCandWordCount = ime_pinyin::im_search(googlepinyin->buf, buflen);
-        input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand ;
+        input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand - 1 ;
     }
     else {
         while (len < buflen)
@@ -105,7 +105,7 @@ void TryBestSearch(FcitxGooglePinyin* googlepinyin)
         }
         input->iCandWordCount = ime_pinyin::im_search(googlepinyin->buf, len);
     }
-    input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand ;
+    input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand - 1 ;
 }
 
 /**
@@ -173,7 +173,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
             else
             {
                 input->iCandWordCount = ime_pinyin::im_choose(iKey + input->iCurrentCandPage * maxCand);
-                input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand ;
+                input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand -1 ;
                 return FcitxGooglePinyinGetCandWords(googlepinyin, SM_FIRST);
             }
         }
@@ -186,7 +186,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
             if (ime_pinyin::im_get_fixed_len() != 0 && IsHotKey(sym, state, FCITX_BACKSPACE))
             {
                 input->iCandWordCount = ime_pinyin::im_cancel_last_choice();
-                input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand ;
+                input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand -1 ;
             }
             else
             {
@@ -224,7 +224,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
                     if ( googlepinyin->CursorPos == start[fixed_len])
                     {
                         input->iCandWordCount = ime_pinyin::im_cancel_last_choice();
-                        input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand ;
+                        input->iCandPageCount = (input->iCandWordCount +  maxCand - 1)/ maxCand - 1 ;
                         return FcitxGooglePinyinGetCandWords(googlepinyin, SM_FIRST);
                     }
                     else
