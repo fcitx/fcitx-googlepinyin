@@ -63,6 +63,7 @@ __EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords (void *arg, SEARCH
 __EXPORT_API char *FcitxGooglePinyinGetCandWord (void *arg, int iIndex);
 __EXPORT_API boolean FcitxGooglePinyinInit(void*);
 __EXPORT_API void ReloadConfigFcitxGooglePinyin(void*);
+__EXPORT_API void SaveFcitxGooglePinyin(void* arg);;
 
 
 CONFIG_BINDING_DECLARE(FcitxGooglePinyinConfig);

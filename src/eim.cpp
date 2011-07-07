@@ -504,7 +504,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
                     FcitxGooglePinyinGetCandWords,
                     FcitxGooglePinyinGetCandWord,
                     NULL,
-                    NULL,
+                    SaveFcitxGooglePinyin,
                     ReloadConfigFcitxGooglePinyin,
                     NULL,
                     googlepinyin->config.iPriority
@@ -526,6 +526,8 @@ void FcitxGooglePinyinDestroy (void* arg)
 
 __EXPORT_API void ReloadConfigFcitxGooglePinyin(void* arg)
 {
+    FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
+    LoadGooglePinyinConfig(&googlepinyin->config, false);
 }
 
 /**
@@ -597,4 +599,9 @@ void GetCCandString(FcitxGooglePinyin* googlepinyin, int index)
     size_t strl = ime_pinyin::utf16_strlen(p) * sizeof(ime_pinyin::char16);
     iconv(googlepinyin->conv, (char**) &p, &strl, &pp, &bufsize);
     googlepinyin->ubuf[UTF8_BUF_LEN - bufsize] = 0;
+}
+
+void SaveFcitxGooglePinyin(void* arg)
+{
+    ime_pinyin::im_flush_cache();
 }
