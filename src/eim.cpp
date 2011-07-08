@@ -58,7 +58,7 @@ static void GetCCandString(FcitxGooglePinyin* googlepinyin, int index);
 static void LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs, boolean reload);
 static void SaveGooglePinyinConfig(FcitxGooglePinyinConfig* fs);
 
-CONFIG_DESC_DEFINE(GetGooglePinyinConfigDesc, "addon/fcitx-googlepinyin.desc")
+CONFIG_DESC_DEFINE(GetGooglePinyinConfigDesc, "fcitx-googlepinyin.desc")
 
 /**
  * @brief Reset the status.
@@ -490,7 +490,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
     googlepinyin->owner = instance;
 
     googlepinyin->conv = iconv_open("utf8", "utf16");
-    GetXDGFileUser("googlepinyin/userdict_pinyin.dat", NULL, &userDict);
+    GetXDGFileUserWithPrefix("googlepinyin", "userdict_pinyin.dat", NULL, &userDict);
 
     ime_pinyin::im_open_decoder(PKGDATADIR "/googlepinyin/dict_pinyin.dat", userDict);
 
@@ -539,7 +539,7 @@ void LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs, boolean reload)
 {
     ConfigFileDesc *configDesc = GetGooglePinyinConfigDesc();
 
-    FILE *fp = GetXDGFileUser( "googlepinyin/fcitx-googlepinyin.config", "rt", NULL);
+    FILE *fp = GetXDGFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "rt", NULL);
 
     if (!fp)
     {
@@ -575,7 +575,7 @@ void LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs, boolean reload)
 void SaveGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
 {
     ConfigFileDesc *configDesc = GetGooglePinyinConfigDesc();
-    FILE *fp = GetXDGFileUser( "googlepinyin/fcitx-googlepinyin.config", "wt", NULL);
+    FILE *fp = GetXDGFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "wt", NULL);
     SaveConfigFileFp(fp, &fs->gconfig, configDesc);
     fclose(fp);
 }
