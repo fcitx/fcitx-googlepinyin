@@ -366,7 +366,7 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
         } else
             str[1] = '\0';
 
-        if (i == 9)
+        if (index == 9)
             str[0] = '0';
         else
             str[0] = index + 1 + '0';
@@ -588,7 +588,7 @@ boolean DecodeIsDone(FcitxGooglePinyin* googlepinyin)
     size_t len;
 
     const char* pystr = ime_pinyin::im_get_sps_str(&len);
-    return (strlen(pystr) == start[ime_pinyin::im_get_fixed_len()]);
+    return (len == start[ime_pinyin::im_get_fixed_len()]);
 }
 
 void GetCCandString(FcitxGooglePinyin* googlepinyin, int index)
