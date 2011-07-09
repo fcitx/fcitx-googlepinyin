@@ -491,7 +491,8 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
 
     googlepinyin->conv = iconv_open("utf8", "utf16");
     FILE* fp = GetXDGFileUserWithPrefix("googlepinyin", "userdict_pinyin.dat", "a", &userDict);
-    fclose(fp);
+    if (fp)
+        fclose(fp);
 
     ime_pinyin::im_open_decoder(PKGDATADIR "/googlepinyin/dict_pinyin.dat", userDict);
 
