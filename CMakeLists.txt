@@ -19,7 +19,6 @@ if(NOT DEFINED LIB_INSTALL_DIR)
 endif()
 
 include(FindPkgConfig)
-PKG_CHECK_MODULES(GOOGLEPINYIN "googlepinyin >= 1.0" )
 
 set(prefix      ${CMAKE_INSTALL_PREFIX})
 set(exec_prefix ${CMAKE_INSTALL_PREFIX})
@@ -29,8 +28,8 @@ set(addondir ${libdir}/${package} )
 set(pkgdatadir ${CMAKE_INSTALL_PREFIX}/share/${package})
 set(localedir ${CMAKE_INSTALL_PREFIX}/share/locale)
 set(includedir  ${CMAKE_INSTALL_PREFIX}/include)
-set(CMAKE_C_FLAGS "-Wall")
-set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+set(CMAKE_CXX_FLAGS "-Wall")
+set(CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined,--as-needed")
 configure_file(config.h.in config.h)
 
 set(libdir ${LIB_INSTALL_DIR})

@@ -23,19 +23,20 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-
-extern "C" {
-#include <fcitx/ime.h>
-#include <fcitx-config/hotkey.h>
-#include <fcitx-config/xdg.h>
-#include <fcitx-utils/cutils.h>
-#include <fcitx-utils/keys.h>
-#include <fcitx-config/fcitx-config.h>
-#include <fcitx/instance.h>
-}
 #include <string>
 #include <libintl.h>
 #include <iconv.h>
+
+#include <fcitx/ime.h>
+#include <fcitx-config/hotkey.h>
+#include <fcitx-config/xdg.h>
+#include <fcitx-utils/log.h>
+#include <fcitx/keys.h>
+#include <fcitx-config/fcitx-config.h>
+#include <fcitx/instance.h>
+#include <fcitx-utils/utils.h>
+
+#define _(x) gettext(x)
 
 #include "eim.h"
 #include "pinyinime.h"
@@ -198,7 +199,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
                         return IRV_DO_NOTHING;
                 }
                 size_t len = strlen(googlepinyin->buf);
-                if (googlepinyin->CursorPos == len)
+                if (googlepinyin->CursorPos == (int)len)
                     return IRV_DO_NOTHING;
                 memmove(googlepinyin->buf + googlepinyin->CursorPos, googlepinyin->buf + googlepinyin->CursorPos + 1, len - googlepinyin->CursorPos - 1);
                 googlepinyin->buf[strlen(googlepinyin->buf) - 1] = 0;
@@ -216,8 +217,8 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
         {
             if (IsHotKey(sym, state, FCITX_LEFT))
             {
-                const ime_pinyin::char16* start = 0;
-                size_t start_pos_len = ime_pinyin::im_get_spl_start_pos(start);
+                const ime_pinyin::uint16* start = 0;
+                ime_pinyin::im_get_spl_start_pos(start);
                 size_t fixed_len = ime_pinyin::im_get_fixed_len();
                 if (googlepinyin->CursorPos > 0)
                 {
@@ -240,7 +241,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
             else if (IsHotKey(sym, state, FCITX_RIGHT))
             {
                 size_t len = strlen(googlepinyin->buf);
-                if (googlepinyin->CursorPos < len)
+                if (googlepinyin->CursorPos < (int) len)
                 {
                     googlepinyin->CursorPos ++ ;
                     FcitxGooglePinyinUpdateCand(googlepinyin);
@@ -250,8 +251,8 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
             }
             else if (IsHotKey(sym, state, FCITX_HOME))
             {
-                const ime_pinyin::char16* start = 0;
-                size_t start_pos_len = ime_pinyin::im_get_spl_start_pos(start);
+                const ime_pinyin::uint16* start = 0;
+                ime_pinyin::im_get_spl_start_pos(start);
                 size_t fixed_len = ime_pinyin::im_get_fixed_len();
                 if ( googlepinyin->CursorPos != start[fixed_len])
                 {
@@ -264,7 +265,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
             else if (IsHotKey(sym, state, FCITX_END))
             {
                 size_t len = strlen(googlepinyin->buf);
-                if (googlepinyin->CursorPos != len)
+                if (googlepinyin->CursorPos != (int) len)
                 {
                     googlepinyin->CursorPos = len ;
                     FcitxGooglePinyinUpdateCand(googlepinyin);
@@ -296,7 +297,7 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
     SetMessageCount(GetMessageUp(instance), 0);
     if (googlepinyin->buf[0] != '\0')
     {
-        const ime_pinyin::char16* start = 0;
+        const ime_pinyin::uint16* start = 0;
         char *pp = googlepinyin->ubuf;
         size_t start_pos_len = ime_pinyin::im_get_spl_start_pos(start);
         size_t fixed_len = ime_pinyin::im_get_fixed_len() * sizeof(ime_pinyin::char16);
@@ -310,7 +311,7 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
         if (remainPos < 0)
             googlepinyin->CursorPos = start[ime_pinyin::im_get_fixed_len()];
         input->iCursorPos = strlen(googlepinyin->ubuf);
-        for (int i = ime_pinyin::im_get_fixed_len();
+        for (size_t i = ime_pinyin::im_get_fixed_len();
                 i < start_pos_len;
                 i ++)
         {
@@ -343,7 +344,7 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
             if (remainPos >= 0)
             {
                 input->iCursorPos += 1;
-                if (remainPos > strlen(googlepinyin->buf + start[start_pos_len]))
+                if (remainPos > (int) strlen(googlepinyin->buf + start[start_pos_len]))
                     remainPos = strlen(googlepinyin->buf + start[start_pos_len]);
                 input->iCursorPos += remainPos;
             }
@@ -522,7 +523,6 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
 __EXPORT_API
 void FcitxGooglePinyinDestroy (void* arg)
 {
-    FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
     free(arg);
 }
 
@@ -585,11 +585,10 @@ void SaveGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
 
 boolean DecodeIsDone(FcitxGooglePinyin* googlepinyin)
 {
-    const ime_pinyin::char16* start = 0;
-    size_t startpos = ime_pinyin::im_get_spl_start_pos(start);
+    const ime_pinyin::uint16* start = 0;
     size_t len;
-
-    const char* pystr = ime_pinyin::im_get_sps_str(&len);
+    ime_pinyin::im_get_spl_start_pos(start);
+    ime_pinyin::im_get_sps_str(&len);
     return (len == start[ime_pinyin::im_get_fixed_len()]);
 }
 

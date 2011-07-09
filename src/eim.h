@@ -26,11 +26,9 @@
 #else
 #define __EXPORT_API
 #endif
-#include <iconv.h>
 
-extern "C" {
+#include <iconv.h>
 #include <fcitx/ime.h>
-}
 #include <pinyinime.h>
 
 #define RET_BUF_LEN 256
