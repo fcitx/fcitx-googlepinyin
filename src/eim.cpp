@@ -531,7 +531,7 @@ __EXPORT_API void ReloadConfigFcitxGooglePinyin(void* arg)
 }
 
 /**
- * @brief Load the config file for fcitx-sunpinyin
+ * @brief Load the config file for fcitx-googlepinyin
  *
  * @param Bool is reload or not
  **/
@@ -546,7 +546,7 @@ void LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs, boolean reload)
         if (!reload && errno == ENOENT)
         {
             char *lastdomain = strdup(textdomain(NULL));
-            textdomain("fcitx-sunpinyin");
+            textdomain("fcitx-googlepinyin");
             SaveGooglePinyinConfig(fs);
             textdomain(lastdomain);
             free(lastdomain);

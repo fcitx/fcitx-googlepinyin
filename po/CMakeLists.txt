@@ -1,13 +1,13 @@
 file(GLOB PO_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.po) 
 file(RELATIVE_PATH REL_SOURCE_ROOT ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR})
 
-set(POT_FILE ${CMAKE_CURRENT_BINARY_DIR}/fcitx-sunpinyin.pot)
+set(POT_FILE ${CMAKE_CURRENT_BINARY_DIR}/fcitx-googlepinyin.pot)
 
 configure_file(POTFILES.in.in POTFILES.in)
 
 add_custom_command(
     OUTPUT ${POT_FILE}
-    COMMAND INTLTOOL_EXTRACT=${INTLTOOL_EXTRACT} srcdir=${CMAKE_CURRENT_BINARY_DIR} ${INTLTOOL_UPDATE} --gettext-package fcitx-sunpinyin --pot
+    COMMAND INTLTOOL_EXTRACT=${INTLTOOL_EXTRACT} srcdir=${CMAKE_CURRENT_BINARY_DIR} ${INTLTOOL_UPDATE} --gettext-package fcitx-googlepinyin --pot
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 
