@@ -547,11 +547,7 @@ void LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs, boolean reload)
     {
         if (!reload && errno == ENOENT)
         {
-            char *lastdomain = strdup(textdomain(NULL));
-            textdomain("fcitx-googlepinyin");
             SaveGooglePinyinConfig(fs);
-            textdomain(lastdomain);
-            free(lastdomain);
             LoadGooglePinyinConfig(fs, true);
         }
         return;
