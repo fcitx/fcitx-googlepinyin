@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-24 14:51+0800\n"
+"POT-Creation-Date: 2011-07-24 19:37+0800\n"
 "PO-Revision-Date: 2011-07-24 14:53+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: /home/saber/Develop/fcitx-googlepinyin/build/po/..//data/fcitx-googlepinyin.conf.in.h:1
+#: /home/saber/Develop/fcitx-googlepinyin/build/po/tmp/fcitx-googlepinyin.conf.in.h:1
 msgid "Google Pinyin"
 msgstr "Google 拼音"
 
-#: /home/saber/Develop/fcitx-googlepinyin/build/po/../..//src/eim.cpp:502
+#: /home/saber/Develop/fcitx-googlepinyin/build/po/../..//src/eim.cpp:503
 msgid "GooglePinyin"
 msgstr "Google 拼音"
 
@@ -29,6 +29,6 @@ msgstr "Google 拼音"
 msgid "Priority of GooglePinyin"
 msgstr "Google 拼音的优先级"
 
-#: /home/saber/Develop/fcitx-googlepinyin/build/po/..//data/fcitx-googlepinyin.conf.in.h:2
+#: /home/saber/Develop/fcitx-googlepinyin/build/po/tmp/fcitx-googlepinyin.conf.in.h:2
 msgid "Wrapper of Google Pinyin on Android"
 msgstr "Android 上的 Google 拼音的封装"
