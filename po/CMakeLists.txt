@@ -1,11 +1,20 @@
-file(GLOB PO_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.po) 
+set(PO_FILES zh_CN.po)
 file(RELATIVE_PATH REL_SOURCE_ROOT ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR})
+if ("${REL_SOURCE_ROOT}" STREQUAL "")
+    set(REL_SOURCE_ROOT ".")
+endif("${REL_SOURCE_ROOT}" STREQUAL "")
 
 set(POT_FILE ${CMAKE_CURRENT_BINARY_DIR}/fcitx-googlepinyin.pot)
 
 configure_file(POTFILES.in.in POTFILES.in)
 
 extract_fcitx_addon_conf_postring()
+
+add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/desc.po
+                   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/getdescpo ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
+                   DEPENDS getdescpo)
+
+add_custom_target(desc ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/desc.po)
 
 add_custom_command(
     OUTPUT ${POT_FILE}
