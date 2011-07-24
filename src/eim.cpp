@@ -57,7 +57,7 @@ FcitxIMClass ime = {
 static void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin);
 static boolean DecodeIsDone(FcitxGooglePinyin* googlepinyin);
 static void GetCCandString(FcitxGooglePinyin* googlepinyin, int index);
-static void LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs, boolean reload);
+static boolean LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs);
 static void SaveGooglePinyinConfig(FcitxGooglePinyinConfig* fs);
 
 CONFIG_DESC_DEFINE(GetGooglePinyinConfigDesc, "fcitx-googlepinyin.desc")
@@ -487,7 +487,11 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
 {
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) fcitx_malloc0(sizeof(FcitxGooglePinyin));
     bindtextdomain("fcitx-googlepinyin", LOCALEDIR);
-    LoadGooglePinyinConfig(&googlepinyin->config, false);
+    if (!LoadGooglePinyinConfig(&googlepinyin->config))
+    {
+        free(googlepinyin);
+        return NULL;
+    }
     char* userDict;
     googlepinyin->owner = instance;
 
@@ -530,7 +534,7 @@ void FcitxGooglePinyinDestroy (void* arg)
 __EXPORT_API void ReloadConfigFcitxGooglePinyin(void* arg)
 {
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
-    LoadGooglePinyinConfig(&googlepinyin->config, false);
+    LoadGooglePinyinConfig(&googlepinyin->config);
 }
 
 /**
@@ -538,32 +542,27 @@ __EXPORT_API void ReloadConfigFcitxGooglePinyin(void* arg)
  *
  * @param Bool is reload or not
  **/
-void LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs, boolean reload)
+boolean LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
 {
     ConfigFileDesc *configDesc = GetGooglePinyinConfigDesc();
+    if (configDesc == NULL)
+        return false;
 
     FILE *fp = GetXDGFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "rt", NULL);
 
     if (!fp)
     {
-        if (!reload && errno == ENOENT)
-        {
+        if (errno == ENOENT)
             SaveGooglePinyinConfig(fs);
-            LoadGooglePinyinConfig(fs, true);
-        }
-        return;
     }
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
-
-    if (cfile)
-    {
-        FcitxGooglePinyinConfigConfigBind(fs, cfile, configDesc);
-        ConfigBindSync(&fs->gconfig);
-    }
-    else
-    {
-        fs->iPriority = 1;
-    }
+    FcitxGooglePinyinConfigConfigBind(fs, cfile, configDesc);
+    ConfigBindSync(&fs->gconfig);
+    
+    if (fp)
+        fclose(fp);
+    
+    return true;
 }
 
 /**
@@ -576,7 +575,8 @@ void SaveGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
     ConfigFileDesc *configDesc = GetGooglePinyinConfigDesc();
     FILE *fp = GetXDGFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "wt", NULL);
     SaveConfigFileFp(fp, &fs->gconfig, configDesc);
-    fclose(fp);
+    if (fp)
+        fclose(fp);
 }
 
 
