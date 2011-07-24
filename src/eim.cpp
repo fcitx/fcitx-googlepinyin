@@ -45,10 +45,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    FcitxIMClass ime = {
-        FcitxGooglePinyinCreate,
-        FcitxGooglePinyinDestroy
-    };
+FCITX_EXPORT_API
+FcitxIMClass ime = {
+    FcitxGooglePinyinCreate,
+    FcitxGooglePinyinDestroy
+};
 #ifdef __cplusplus
 }
 #endif
