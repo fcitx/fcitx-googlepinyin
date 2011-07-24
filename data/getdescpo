@@ -30,7 +30,7 @@ EOF
 
 cd $indir
 
-descfiles=`find "$indir" -iname "*.desc" | grep -v '\.hg'`
+descfiles=`find "$indir" -name ".hg" -prune -or -name "test" -prune -or  -iname "*.desc" | grep desc`
 
 # Extract Description
 for f in $descfiles
@@ -39,7 +39,7 @@ do
 done
 
 # Extract Group Name
-grep -n '^\[' $descfiles | awk ' "^[" { split($0, a, ":"); split(a[3], b, "/"); print substr(b[1], 2); }'  | sort | uniq | awk '{ print "# unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> "$outdir/$filename"
+grep -nH '^\[' $descfiles | grep -v 'DescriptionFile' | awk ' "^[" { split($0, a, ":"); split(a[3], b, "/"); print substr(b[1], 2); }'  | sort | uniq | awk '{ print "# unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> "$outdir/$filename"
 
 # Extract Enum Name
 grep -h 'Enum[0-9]' $descfiles | sed -e 's/Enum[0-9]=//g' | sort | uniq | awk '{ print "#: unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> "$outdir/$filename"

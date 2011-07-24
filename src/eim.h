@@ -30,12 +30,11 @@
 #include <iconv.h>
 #include <fcitx/ime.h>
 #include <pinyinime.h>
+#include <fcitx/instance.h>
 
 #define RET_BUF_LEN 256
 #define UTF8_BUF_LEN 4096
 #define MAX_GOOGLEPINYIN_INPUT MAX_USER_INPUT
-
-struct FcitxInstance;
 
 typedef struct FcitxGooglePinyinConfig {
     GenericConfig gconfig;
