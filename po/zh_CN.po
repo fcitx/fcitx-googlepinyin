@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-24 19:37+0800\n"
+"POT-Creation-Date: 2011-07-26 18:25+0800\n"
 "PO-Revision-Date: 2011-07-24 14:53+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Google Pinyin"
 msgstr "Google 拼音"
 
-#: /home/saber/Develop/fcitx-googlepinyin/build/po/../..//src/eim.cpp:503
+#: /home/saber/Develop/fcitx-googlepinyin/build/po/../..//src/eim.cpp:507
 msgid "GooglePinyin"
 msgstr "Google 拼音"
 

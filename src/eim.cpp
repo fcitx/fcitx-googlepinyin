@@ -492,7 +492,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
         free(googlepinyin);
         return NULL;
     }
-    char* userDict;
+    char* userDict = NULL;
     googlepinyin->owner = instance;
 
     googlepinyin->conv = iconv_open("utf8", "utf16");
@@ -501,6 +501,8 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
         fclose(fp);
 
     ime_pinyin::im_open_decoder(PKGDATADIR "/googlepinyin/dict_pinyin.dat", userDict);
+    if (userDict)
+        free(userDict);
 
     FcitxRegisterIM(instance,
                     googlepinyin,
