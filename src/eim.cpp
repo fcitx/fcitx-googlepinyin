@@ -46,11 +46,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-FCITX_EXPORT_API
-FcitxIMClass ime = {
-    FcitxGooglePinyinCreate,
-    FcitxGooglePinyinDestroy
-};
+    FCITX_EXPORT_API
+    FcitxIMClass ime = {
+        FcitxGooglePinyinCreate,
+        FcitxGooglePinyinDestroy
+    };
 #ifdef __cplusplus
 }
 #endif
@@ -152,7 +152,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
             size_t len = strlen(googlepinyin->buf);
             if (len == 0)
                 return IRV_TO_PROCESS;
-            
+
             return CandidateWordChooseByIndex(input->candList, 0);
         }
 
@@ -188,7 +188,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
     }
     else
     {
-        
+
         if (strlen(googlepinyin->buf) > 0)
         {
             if (IsHotKey(sym, state, FCITX_LEFT))
@@ -356,10 +356,10 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords(void* arg)
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
     FcitxInstance* instance = googlepinyin->owner;
     FcitxInputState* input = &instance->input;
-    
+
     CandidateWordSetPageSize(input->candList, googlepinyin->owner->config.iMaxCandWord);
     CandidateWordSetChoose(input->candList, DIGIT_STR_CHOOSE);
-    
+
     if (DecodeIsDone(googlepinyin))
     {
         GetCCandString(googlepinyin, 0);
@@ -389,7 +389,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, CandidateWord* candW
     FcitxInstance* instance = googlepinyin->owner;
     FcitxInputState* input = &instance->input;
     GooglePinyinCandWord* ggCand = (GooglePinyinCandWord*) candWord->priv;
-    
+
     ime_pinyin::im_choose(ggCand->index);
     if (DecodeIsDone(googlepinyin))
     {
@@ -487,10 +487,10 @@ boolean LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
     FcitxGooglePinyinConfigConfigBind(fs, cfile, configDesc);
     ConfigBindSync(&fs->gconfig);
-    
+
     if (fp)
         fclose(fp);
-    
+
     return true;
 }
 
@@ -532,3 +532,4 @@ void SaveFcitxGooglePinyin(void* arg)
 {
     ime_pinyin::im_flush_cache();
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

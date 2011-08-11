@@ -24,3 +24,4 @@
 CONFIG_BINDING_BEGIN(FcitxGooglePinyinConfig);
 CONFIG_BINDING_REGISTER("GooglePinyin", "Priority", iPriority);
 CONFIG_BINDING_END();
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

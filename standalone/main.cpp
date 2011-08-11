@@ -45,3 +45,4 @@ int main(int argc, char *argv[])
     }
     im_close_decoder();
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

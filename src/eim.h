@@ -72,3 +72,4 @@ __EXPORT_API void SaveFcitxGooglePinyin(void* arg);;
 CONFIG_BINDING_DECLARE(FcitxGooglePinyinConfig);
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 
