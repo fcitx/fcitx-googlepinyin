@@ -31,17 +31,22 @@
 #include <fcitx/ime.h>
 #include <pinyinime.h>
 #include <fcitx/instance.h>
+#include <fcitx/candidate.h>
 
 #define RET_BUF_LEN 256
 #define UTF8_BUF_LEN 4096
 #define MAX_GOOGLEPINYIN_INPUT MAX_USER_INPUT
 
-typedef struct FcitxGooglePinyinConfig {
+typedef struct _FcitxGooglePinyinConfig {
     GenericConfig gconfig;
     int iPriority;
 } FcitxGooglePinyinConfig;
 
-typedef struct FcitxGooglePinyin
+typedef struct _GooglePinyinCandWord {
+    int index;
+} GooglePinyinCandWord;
+
+typedef struct _FcitxGooglePinyin
 {
     FcitxGooglePinyinConfig config;
     FcitxInstance* owner;
@@ -51,13 +56,14 @@ typedef struct FcitxGooglePinyin
     ime_pinyin::char16 retbuf[RET_BUF_LEN];
     ime_pinyin::char16 retbuf2[RET_BUF_LEN];
     int CursorPos;
+    int candNum;
 } FcitxGooglePinyin;
 
 __EXPORT_API void* FcitxGooglePinyinCreate(FcitxInstance* instance);
 __EXPORT_API void FcitxGooglePinyinDestroy(void* arg);
 __EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned int state);
-__EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords (void *arg, SEARCH_MODE mode);
-__EXPORT_API char *FcitxGooglePinyinGetCandWord (void *arg, int iIndex);
+__EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords (void *arg);
+__EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, CandidateWord* candWord);
 __EXPORT_API boolean FcitxGooglePinyinInit(void*);
 __EXPORT_API void ReloadConfigFcitxGooglePinyin(void*);
 __EXPORT_API void SaveFcitxGooglePinyin(void* arg);;
