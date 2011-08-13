@@ -428,9 +428,17 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
     if (fp)
         fclose(fp);
 
-    ime_pinyin::im_open_decoder(PKGDATADIR "/googlepinyin/dict_pinyin.dat", userDict);
+    bool result = ime_pinyin::im_open_decoder(DATADIR "/googlepinyin/dict_pinyin.dat", userDict);
+
     if (userDict)
         free(userDict);
+
+    if (!result)
+    {
+        free(googlepinyin);
+        return NULL;
+    }
+
 
     FcitxRegisterIM(instance,
                     googlepinyin,
@@ -532,4 +540,4 @@ void SaveFcitxGooglePinyin(void* arg)
 {
     ime_pinyin::im_flush_cache();
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
