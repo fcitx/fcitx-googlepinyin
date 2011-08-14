@@ -357,7 +357,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords(void* arg)
     FcitxInstance* instance = googlepinyin->owner;
     FcitxInputState* input = &instance->input;
 
-    CandidateWordSetPageSize(input->candList, googlepinyin->owner->config.iMaxCandWord);
+    CandidateWordSetPageSize(input->candList, googlepinyin->owner->config->iMaxCandWord);
     CandidateWordSetChoose(input->candList, DIGIT_STR_CHOOSE);
 
     if (DecodeIsDone(googlepinyin))
