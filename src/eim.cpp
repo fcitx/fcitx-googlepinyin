@@ -390,7 +390,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, CandidateWord* candW
     FcitxInputState* input = &instance->input;
     GooglePinyinCandWord* ggCand = (GooglePinyinCandWord*) candWord->priv;
 
-    ime_pinyin::im_choose(ggCand->index);
+    googlepinyin->candNum = ime_pinyin::im_choose(ggCand->index);
     if (DecodeIsDone(googlepinyin))
     {
         GetCCandString(googlepinyin, 0);
