@@ -367,7 +367,10 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords(void* arg)
         ime_pinyin::im_get_sps_str(&len);
         strcpy(GetOutputString(input), googlepinyin->ubuf);
         strcat(GetOutputString(input), googlepinyin->buf + len);
-        return IRV_COMMIT_STRING;
+        if (strlen(GetOutputString(input)) == 0)
+            return IRV_CLEAN;
+        else
+            return IRV_COMMIT_STRING;
     }
     FcitxGooglePinyinUpdateCand(googlepinyin);
     if (googlepinyin->buf[0] == '\0')
@@ -398,7 +401,10 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, CandidateWord* candW
         ime_pinyin::im_get_sps_str(&len);
         strcpy(GetOutputString(input), googlepinyin->ubuf);
         strcat(GetOutputString(input), googlepinyin->buf + len);
-        return IRV_COMMIT_STRING;
+        if (strlen(GetOutputString(input)) == 0)
+            return IRV_CLEAN;
+        else
+            return IRV_COMMIT_STRING;
     }
     else
         return IRV_DISPLAY_CANDWORDS;
