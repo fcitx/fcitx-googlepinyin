@@ -10,6 +10,8 @@ include_directories(${FCITX4_FCITX_INCLUDE_DIRS})
 include_directories(${FCITX4_FCITX_CONFIG_INCLUDE_DIRS})
 include_directories(${FCITX4_FCITX_UTILS_INCLUDE_DIRS})
 include_directories(${GOOGLEPINYIN_INCLUDE_DIRS})
+include_directories(${LIBINTL_INCLUDE_DIR})
+include_directories(${LIBICONV_INCLUDE_DIR})
 
 link_directories(${GOOGLEPINYIN_LIBRARY_DIRS})
 link_directories(${FCITX4_FCITX_LIBRARY_DIRS})
