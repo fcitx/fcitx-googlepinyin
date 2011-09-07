@@ -435,7 +435,12 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
     char* userDict = NULL;
     googlepinyin->owner = instance;
 
-    googlepinyin->conv = iconv_open("utf8", "utf16");
+    googlepinyin->conv = iconv_open("utf-8", "utf-16");
+    if (googlepinyin->conv == (iconv_t)(-1))
+    {
+        free(googlepinyin);
+        return NULL;
+    }
     FILE* fp = GetXDGFileUserWithPrefix("googlepinyin", "userdict_pinyin.dat", "a", &userDict);
     if (fp)
         fclose(fp);
