@@ -24,4 +24,6 @@ target_link_libraries(fcitx-googlepinyin
                       ${FCITX4_FCITX_LIBRARIES}
                       ${FCITX4_FCITX_CONFIG_LIBRARIES}
                       ${FCITX4_FCITX_UTILS_LIBRARIES}
+                      ${LIBICONV_LIBRARIES}
+                      ${LIBINTL_LIBRARIES}
                       )
