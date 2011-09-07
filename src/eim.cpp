@@ -435,7 +435,16 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
     char* userDict = NULL;
     googlepinyin->owner = instance;
 
-    googlepinyin->conv = iconv_open("utf-8", "utf-16");
+    union {
+        short s;
+        unsigned char b[2];
+    } endian;
+
+    endian.s = 0x1234;
+    if (endian.b[0] == 0x12)
+        googlepinyin->conv = iconv_open("utf-8", "utf-16be");
+    else
+        googlepinyin->conv = iconv_open("utf-8", "utf-16le");
     if (googlepinyin->conv == (iconv_t)(-1))
     {
         free(googlepinyin);
