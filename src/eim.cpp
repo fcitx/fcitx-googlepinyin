@@ -55,6 +55,12 @@ extern "C" {
 }
 #endif
 
+#if defined(__linux__)
+typedef char** TIconvStr;
+#else
+typedef const char** TIconvStr;
+#endif
+
 static void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin);
 static boolean DecodeIsDone(FcitxGooglePinyin* googlepinyin);
 static void GetCCandString(FcitxGooglePinyin* googlepinyin, int index);
@@ -269,7 +275,7 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
         size_t fixed_len = ime_pinyin::im_get_fixed_len() * sizeof(ime_pinyin::char16);
         size_t bufsize = UTF8_BUF_LEN;
         ime_pinyin::char16* p = ime_pinyin::im_get_candidate(0, googlepinyin->retbuf, RET_BUF_LEN);
-        iconv(googlepinyin->conv, (char**) &p, &fixed_len, &pp, &bufsize);
+        iconv(googlepinyin->conv, (TIconvStr) &p, &fixed_len, &pp, &bufsize);
         googlepinyin->ubuf[UTF8_BUF_LEN - bufsize] = 0;
 
         AddMessageAtLast(input->msgPreedit, MSG_INPUT, "%s", googlepinyin->ubuf);
@@ -538,7 +544,7 @@ void GetCCandString(FcitxGooglePinyin* googlepinyin, int index)
     size_t bufsize = UTF8_BUF_LEN;
     ime_pinyin::char16* p = ime_pinyin::im_get_candidate(index, googlepinyin->retbuf, RET_BUF_LEN);
     size_t strl = ime_pinyin::utf16_strlen(p) * sizeof(ime_pinyin::char16);
-    iconv(googlepinyin->conv, (char**) &p, &strl, &pp, &bufsize);
+    iconv(googlepinyin->conv, (TIconvStr) &p, &strl, &pp, &bufsize);
     googlepinyin->ubuf[UTF8_BUF_LEN - bufsize] = 0;
 }
 
