@@ -324,7 +324,7 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
     }
     strcpy(FcitxInputStateGetRawInputBuffer(input), googlepinyin->buf);
     FcitxInputStateSetRawInputBufferSize(input, strlen(googlepinyin->buf));
-    FcitxInputStateSetCursorPos(input, true);
+    FcitxInputStateSetShowCursor(input, true);
     CleanInputWindowDown(instance);
 
     int index = 0;
