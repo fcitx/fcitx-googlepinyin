@@ -324,6 +324,7 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
             }
         }
         FcitxInputStateSetCursorPos(input, iCursorPos);
+        FcitxInputStateSetClientCursorPos(input, 0);
     }
     strcpy(FcitxInputStateGetRawInputBuffer(input), googlepinyin->buf);
     FcitxInputStateSetRawInputBufferSize(input, strlen(googlepinyin->buf));
@@ -343,8 +344,11 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
         candWord.strExtra = NULL;
         candWord.strWord = strdup(googlepinyin->ubuf);
         CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+        
+        if (i == 0)
+            AddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", candWord.strWord);
     }
-
+    
 }
 
 boolean FcitxGooglePinyinInit(void* arg)
