@@ -474,7 +474,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
     }
 
 
-    FcitxRegisterIM(instance,
+    FcitxRegisterIMv2(instance,
                     googlepinyin,
                     _("GooglePinyin"),
                     "googlepinyin",
@@ -486,7 +486,8 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
                     SaveFcitxGooglePinyin,
                     ReloadConfigFcitxGooglePinyin,
                     NULL,
-                    googlepinyin->config.iPriority
+                    googlepinyin->config.iPriority,
+                    "zh_CN"
                    );
     return googlepinyin;
 }
