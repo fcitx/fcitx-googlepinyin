@@ -1,0 +1,7 @@
+[InputMethod]
+UniqueName=googlepinyin
+_Name=Google Pinyin
+IconName=googlepinyin
+Priority=1
+LangCode=zh_CN
+Parent=fcitx-googlepinyin

@@ -6,3 +6,4 @@ Category=InputMethod
 Enabled=True
 Library=fcitx-googlepinyin.so
 Type=SharedLibrary
+IMRegisterMethod=ConfigFile
