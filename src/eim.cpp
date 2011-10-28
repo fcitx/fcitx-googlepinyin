@@ -462,7 +462,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
     if (fp)
         fclose(fp);
 
-    bool result = ime_pinyin::im_open_decoder(DATADIR "/googlepinyin/dict_pinyin.dat", userDict);
+    bool result = ime_pinyin::im_open_decoder(LIBDIR "/googlepinyin/data/dict_pinyin.dat", userDict);
 
     if (userDict)
         free(userDict);
