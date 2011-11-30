@@ -343,6 +343,7 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
         candWord.priv = ggCand;
         candWord.strExtra = NULL;
         candWord.strWord = strdup(googlepinyin->ubuf);
+        candWord.wordType = MSG_OTHER;
         CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
         
         if (i == 0)
