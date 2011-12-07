@@ -129,9 +129,9 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
     FcitxInstance* instance = googlepinyin->owner;
     FcitxInputState* input = FcitxInstanceGetInputState(instance);
-    if (IsHotKeySimple(sym, state))
+    if (FcitxHotkeyIsHotKeySimple(sym, state))
     {
-        if (IsHotKeyLAZ(sym, state) || sym == '\'')
+        if (FcitxHotkeyIsHotKeyLAZ(sym, state) || sym == '\'')
         {
             if (strlen(googlepinyin->buf) < MAX_GOOGLEPINYIN_INPUT)
             {
@@ -155,27 +155,27 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
             else
                 return IRV_DO_NOTHING;
         }
-        else if (IsHotKey(sym, state, FCITX_SPACE))
+        else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE))
         {
             size_t len = strlen(googlepinyin->buf);
             if (len == 0)
                 return IRV_TO_PROCESS;
 
-            return CandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
+            return FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
         }
 
     }
-    if (IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_DELETE))
+    if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE) || FcitxHotkeyIsHotKey(sym, state, FCITX_DELETE))
     {
         if (strlen(googlepinyin->buf) > 0)
         {
-            if (ime_pinyin::im_get_fixed_len() != 0 && IsHotKey(sym, state, FCITX_BACKSPACE))
+            if (ime_pinyin::im_get_fixed_len() != 0 && FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE))
             {
                 googlepinyin->candNum = ime_pinyin::im_cancel_last_choice();
             }
             else
             {
-                if (IsHotKey(sym, state, FCITX_BACKSPACE))
+                if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE))
                 {
                     if (googlepinyin->CursorPos > 0)
                         googlepinyin->CursorPos -- ;
@@ -199,7 +199,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
 
         if (strlen(googlepinyin->buf) > 0)
         {
-            if (IsHotKey(sym, state, FCITX_LEFT))
+            if (FcitxHotkeyIsHotKey(sym, state, FCITX_LEFT))
             {
                 const ime_pinyin::uint16* start = 0;
                 ime_pinyin::im_get_spl_start_pos(start);
@@ -220,7 +220,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
 
                 return IRV_DO_NOTHING;
             }
-            else if (IsHotKey(sym, state, FCITX_RIGHT))
+            else if (FcitxHotkeyIsHotKey(sym, state, FCITX_RIGHT))
             {
                 size_t len = strlen(googlepinyin->buf);
                 if (googlepinyin->CursorPos < (int) len)
@@ -230,7 +230,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
                 }
                 return IRV_DO_NOTHING;
             }
-            else if (IsHotKey(sym, state, FCITX_HOME))
+            else if (FcitxHotkeyIsHotKey(sym, state, FCITX_HOME))
             {
                 const ime_pinyin::uint16* start = 0;
                 ime_pinyin::im_get_spl_start_pos(start);
@@ -242,7 +242,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
                 }
                 return IRV_DO_NOTHING;
             }
-            else if (IsHotKey(sym, state, FCITX_END))
+            else if (FcitxHotkeyIsHotKey(sym, state, FCITX_END))
             {
                 size_t len = strlen(googlepinyin->buf);
                 if (googlepinyin->CursorPos != (int) len)
@@ -268,7 +268,7 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
     size_t len = 0;
     FcitxLog(DEBUG, "len: %lu", len);
 
-    CleanInputWindowUp(instance);
+    FcitxInstanceCleanInputWindowUp(instance);
     if (googlepinyin->buf[0] != '\0')
     {
         const ime_pinyin::uint16* start = 0;
@@ -280,7 +280,7 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
         iconv(googlepinyin->conv, (TIconvStr) &p, &fixed_len, &pp, &bufsize);
         googlepinyin->ubuf[UTF8_BUF_LEN - bufsize] = 0;
 
-        AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", googlepinyin->ubuf);
+        FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", googlepinyin->ubuf);
         int remainPos = googlepinyin->CursorPos - start[ime_pinyin::im_get_fixed_len()];
         if (remainPos < 0)
             googlepinyin->CursorPos = start[ime_pinyin::im_get_fixed_len()];
@@ -302,18 +302,18 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
             }
             remainPos -= start[i + 1] - start[i];
 
-            AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_CODE, pybuf );
+            FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_CODE, pybuf );
             if (i != start_pos_len - 1)
             {
-                MessageConcatLast(FcitxInputStateGetPreedit(input), " ");
+                FcitxMessagesMessageConcatLast(FcitxInputStateGetPreedit(input), " ");
                 if (remainPos >= 0)
                     iCursorPos += 1;
             }
         }
         if (strlen(googlepinyin->buf) > len)
         {
-            MessageConcatLast(FcitxInputStateGetPreedit(input), " ");
-            AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_CODE, googlepinyin->buf + start[start_pos_len] );
+            FcitxMessagesMessageConcatLast(FcitxInputStateGetPreedit(input), " ");
+            FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_CODE, googlepinyin->buf + start[start_pos_len] );
 
             if (remainPos >= 0)
             {
@@ -329,25 +329,25 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
     strcpy(FcitxInputStateGetRawInputBuffer(input), googlepinyin->buf);
     FcitxInputStateSetRawInputBufferSize(input, strlen(googlepinyin->buf));
     FcitxInputStateSetShowCursor(input, true);
-    CleanInputWindowDown(instance);
+    FcitxInstanceCleanInputWindowDown(instance);
 
     int index = 0;
     for (int i = 0 ;i < googlepinyin->candNum ; i ++, index ++)
     {
         GetCCandString(googlepinyin, i);
-        GooglePinyinCandWord* ggCand = (GooglePinyinCandWord*) fcitx_malloc0(sizeof(GooglePinyinCandWord));
+        GooglePinyinCandWord* ggCand = (GooglePinyinCandWord*) fcitx_utils_malloc0(sizeof(GooglePinyinCandWord));
         ggCand->index = i;
-        CandidateWord candWord;
+        FcitxCandidateWord candWord;
         candWord.callback = FcitxGooglePinyinGetCandWord;
         candWord.owner = googlepinyin;
         candWord.priv = ggCand;
         candWord.strExtra = NULL;
         candWord.strWord = strdup(googlepinyin->ubuf);
         candWord.wordType = MSG_OTHER;
-        CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+        FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
         
         if (i == 0)
-            AddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", candWord.strWord);
+            FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", candWord.strWord);
     }
     
 }
@@ -370,19 +370,19 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords(void* arg)
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
     FcitxInstance* instance = googlepinyin->owner;
     FcitxInputState* input = FcitxInstanceGetInputState(instance);
-    FcitxConfig* config = FcitxInstanceGetConfig(googlepinyin->owner);
+    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(googlepinyin->owner);
 
-    CandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
-    CandidateWordSetChoose(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE);
+    FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
+    FcitxCandidateWordSetChoose(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE);
 
     if (DecodeIsDone(googlepinyin))
     {
         GetCCandString(googlepinyin, 0);
         size_t len;
         ime_pinyin::im_get_sps_str(&len);
-        strcpy(GetOutputString(input), googlepinyin->ubuf);
-        strcat(GetOutputString(input), googlepinyin->buf + len);
-        if (strlen(GetOutputString(input)) == 0)
+        strcpy(FcitxInputStateGetOutputString(input), googlepinyin->ubuf);
+        strcat(FcitxInputStateGetOutputString(input), googlepinyin->buf + len);
+        if (strlen(FcitxInputStateGetOutputString(input)) == 0)
             return IRV_CLEAN;
         else
             return IRV_COMMIT_STRING;
@@ -401,7 +401,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords(void* arg)
  * @return the string of canidate word
  **/
 __EXPORT_API
-INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, CandidateWord* candWord)
+INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, FcitxCandidateWord* candWord)
 {
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
     FcitxInstance* instance = googlepinyin->owner;
@@ -414,9 +414,9 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, CandidateWord* candW
         GetCCandString(googlepinyin, 0);
         size_t len;
         ime_pinyin::im_get_sps_str(&len);
-        strcpy(GetOutputString(input), googlepinyin->ubuf);
-        strcat(GetOutputString(input), googlepinyin->buf + len);
-        if (strlen(GetOutputString(input)) == 0)
+        strcpy(FcitxInputStateGetOutputString(input), googlepinyin->ubuf);
+        strcat(FcitxInputStateGetOutputString(input), googlepinyin->buf + len);
+        if (strlen(FcitxInputStateGetOutputString(input)) == 0)
             return IRV_CLEAN;
         else
             return IRV_COMMIT_STRING;
@@ -434,7 +434,7 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, CandidateWord* candW
 __EXPORT_API
 void* FcitxGooglePinyinCreate (FcitxInstance* instance)
 {
-    FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) fcitx_malloc0(sizeof(FcitxGooglePinyin));
+    FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) fcitx_utils_malloc0(sizeof(FcitxGooglePinyin));
     bindtextdomain("fcitx-googlepinyin", LOCALEDIR);
     if (!LoadGooglePinyinConfig(&googlepinyin->config))
     {
@@ -459,7 +459,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
         free(googlepinyin);
         return NULL;
     }
-    FILE* fp = GetXDGFileUserWithPrefix("googlepinyin", "userdict_pinyin.dat", "a", &userDict);
+    FILE* fp = FcitxXDGGetFileUserWithPrefix("googlepinyin", "userdict_pinyin.dat", "a", &userDict);
     if (fp)
         fclose(fp);
 
@@ -475,7 +475,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
     }
 
 
-    FcitxRegisterIMv2(instance,
+    FcitxInstanceRegisterIM(instance,
                     googlepinyin,
                     "googlepinyin",
                     _("GooglePinyin"),
@@ -487,6 +487,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
                     NULL,
                     SaveFcitxGooglePinyin,
                     ReloadConfigFcitxGooglePinyin,
+                    NULL,
                     NULL,
                     googlepinyin->config.iPriority,
                     "zh_CN"
@@ -518,20 +519,20 @@ __EXPORT_API void ReloadConfigFcitxGooglePinyin(void* arg)
  **/
 boolean LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
 {
-    ConfigFileDesc *configDesc = GetGooglePinyinConfigDesc();
+    FcitxConfigFileDesc *configDesc = GetGooglePinyinConfigDesc();
     if (configDesc == NULL)
         return false;
 
-    FILE *fp = GetXDGFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "rt", NULL);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "rt", NULL);
 
     if (!fp)
     {
         if (errno == ENOENT)
             SaveGooglePinyinConfig(fs);
     }
-    ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
+    FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
     FcitxGooglePinyinConfigConfigBind(fs, cfile, configDesc);
-    ConfigBindSync(&fs->gconfig);
+    FcitxConfigBindSync(&fs->gconfig);
 
     if (fp)
         fclose(fp);
@@ -546,9 +547,9 @@ boolean LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
  **/
 void SaveGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
 {
-    ConfigFileDesc *configDesc = GetGooglePinyinConfigDesc();
-    FILE *fp = GetXDGFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "wt", NULL);
-    SaveConfigFileFp(fp, &fs->gconfig, configDesc);
+    FcitxConfigFileDesc *configDesc = GetGooglePinyinConfigDesc();
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "wt", NULL);
+    FcitxConfigSaveConfigFileFp(fp, &fs->gconfig, configDesc);
     if (fp)
         fclose(fp);
 }

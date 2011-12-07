@@ -37,7 +37,7 @@
 #define MAX_GOOGLEPINYIN_INPUT MAX_USER_INPUT
 
 typedef struct _FcitxGooglePinyinConfig {
-    GenericConfig gconfig;
+    FcitxGenericConfig gconfig;
     int iPriority;
 } FcitxGooglePinyinConfig;
 
@@ -62,7 +62,7 @@ __EXPORT_API void* FcitxGooglePinyinCreate(FcitxInstance* instance);
 __EXPORT_API void FcitxGooglePinyinDestroy(void* arg);
 __EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned int state);
 __EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords (void *arg);
-__EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, CandidateWord* candWord);
+__EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, FcitxCandidateWord* candWord);
 __EXPORT_API boolean FcitxGooglePinyinInit(void*);
 __EXPORT_API void ReloadConfigFcitxGooglePinyin(void*);
 __EXPORT_API void SaveFcitxGooglePinyin(void* arg);;
