@@ -488,7 +488,6 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
                     SaveFcitxGooglePinyin,
                     ReloadConfigFcitxGooglePinyin,
                     NULL,
-                    NULL,
                     googlepinyin->config.iPriority,
                     "zh_CN"
                    );
