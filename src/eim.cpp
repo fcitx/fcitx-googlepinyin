@@ -35,7 +35,7 @@
 #include <fcitx/instance.h>
 #include <fcitx-utils/utils.h>
 
-#define _(x) gettext(x)
+#define _(x) dgettext("fcitx-googlepinyin", (x))
 
 #include "eim.h"
 #include "pinyinime.h"
