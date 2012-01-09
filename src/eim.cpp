@@ -27,12 +27,13 @@
 #include <iconv.h>
 
 #include <fcitx/ime.h>
-#include <fcitx-config/hotkey.h>
-#include <fcitx-config/xdg.h>
 #include <fcitx-utils/log.h>
 #include <fcitx/keys.h>
-#include <fcitx-config/fcitx-config.h>
 #include <fcitx/instance.h>
+#include <fcitx/context.h>
+#include <fcitx-config/fcitx-config.h>
+#include <fcitx-config/hotkey.h>
+#include <fcitx-config/xdg.h>
 #include <fcitx-utils/utils.h>
 
 #define _(x) dgettext("fcitx-googlepinyin", (x))
@@ -354,6 +355,8 @@ void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin)
 
 boolean FcitxGooglePinyinInit(void* arg)
 {
+    FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
+    FcitxInstanceSetContext(googlepinyin->owner, CONTEXT_IM_KEYBOARD_LAYOUT, "us");
     return true;
 }
 
