@@ -3,3 +3,4 @@
 #define DATADIR "@prefix@/share"
 #define BINDIR "@bindir@"
 #define LIBDIR "@libdir@"
+#cmakedefine LIBICONV_SECOND_ARGUMENT_IS_CONST
