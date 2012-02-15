@@ -4,3 +4,13 @@
 #define BINDIR "@bindir@"
 #define LIBDIR "@libdir@"
 #cmakedefine LIBICONV_SECOND_ARGUMENT_IS_CONST
+
+#define FCITX4_MAJOR_VERSION @FCITX4_MAJOR_VERSION@
+#define FCITX4_MINOR_VERSION @FCITX4_MINOR_VERSION@
+#define FCITX4_PATCH_VERSION @FCITX4_PATCH_VERSION@
+
+#define FCITX_CHECK_VERSION(major,minor,micro)    \
+    (FCITX4_MAJOR_VERSION > (major) || \
+     (FCITX4_MAJOR_VERSION == (major) && FCITX4_MINOR_VERSION > (minor)) || \
+     (FCITX4_MAJOR_VERSION == (major) && FCITX4_MINOR_VERSION == (minor) && \
+      FCITX4_PATCH_VERSION >= (micro)))

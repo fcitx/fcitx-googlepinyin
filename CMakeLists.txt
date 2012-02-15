@@ -4,8 +4,13 @@ cmake_minimum_required(VERSION 2.6)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 FIND_PACKAGE(Gettext REQUIRED)
 FIND_PACKAGE(Fcitx  4.2.0 REQUIRED)
+FIND_PACKAGE(Googlepinyin REQUIRED)
 FIND_PACKAGE(Libintl REQUIRED)
 FIND_PACKAGE(Libiconv REQUIRED)
+
+string(REGEX REPLACE "^([0-9]+)\\.[0-9]+\\.[0-9]+.*" "\\1" FCITX4_MAJOR_VERSION "${FCITX4_VERSION}")
+string(REGEX REPLACE "^[0-9]+\\.([0-9]+)\\.[0-9]+.*" "\\1" FCITX4_MINOR_VERSION "${FCITX4_VERSION}")
+string(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" FCITX4_PATCH_VERSION "${FCITX4_VERSION}")
 
 # uninstall target
 configure_file(
