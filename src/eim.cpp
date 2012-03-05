@@ -538,7 +538,7 @@ boolean LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
     if (configDesc == NULL)
         return false;
 
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "rt", NULL);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "r", NULL);
 
     if (!fp)
     {
@@ -563,7 +563,7 @@ boolean LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
 void SaveGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
 {
     FcitxConfigFileDesc *configDesc = GetGooglePinyinConfigDesc();
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "wt", NULL);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "w", NULL);
     FcitxConfigSaveConfigFileFp(fp, &fs->gconfig, configDesc);
     if (fp)
         fclose(fp);
