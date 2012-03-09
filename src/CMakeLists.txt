@@ -13,8 +13,6 @@ include_directories(
     ${FCITX4_FCITX_UTILS_INCLUDE_DIRS}
 )
 
-add_definitions( -DLOCALEDIR=\"${CMAKE_INSTALL_PREFIX}/share/locale\" )
-
 fcitx_add_addon(fcitx-googlepinyin ${FCITX_GOOGLEPINYIN_SRCS})
 target_link_libraries(fcitx-googlepinyin
                       ${GOOGLEPINYIN_LIBRARIES}

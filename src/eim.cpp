@@ -476,7 +476,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
     else 
 #endif
     {
-        syspath = strdup(LIBDIR "/googlepinyin/data/dict_pinyin.dat");
+        syspath = strdup(GOOGLEPINYIN_LIBDIR "/googlepinyin/data/dict_pinyin.dat");
     }
     bool result = ime_pinyin::im_open_decoder(syspath, userDict);
     free(syspath);
