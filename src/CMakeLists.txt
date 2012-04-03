@@ -1,6 +1,5 @@
 set(FCITX_GOOGLEPINYIN_SRCS
     eim.cpp
-    config.cpp
 )
 
 include_directories(

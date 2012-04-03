@@ -10,15 +10,11 @@ configure_file(POTFILES.in.in ${CMAKE_CURRENT_BINARY_DIR}/POTFILES.in)
 
 extract_fcitx_addon_conf_postring()
 
-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/desc.po
-                   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/getdescpo ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
-                   DEPENDS getdescpo)
-
 add_custom_target(
     pot
     COMMAND INTLTOOL_EXTRACT=${INTLTOOL_EXTRACT} srcdir=${CMAKE_CURRENT_BINARY_DIR} ${INTLTOOL_UPDATE} --gettext-package fcitx-googlepinyin --pot
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/conf.po ${CMAKE_CURRENT_BINARY_DIR}/desc.po
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/conf.po
     )
 
 # Update .po files and compile them to binary .gmo files

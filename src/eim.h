@@ -36,18 +36,12 @@
 #define UTF8_BUF_LEN 4096
 #define MAX_GOOGLEPINYIN_INPUT MAX_USER_INPUT
 
-typedef struct _FcitxGooglePinyinConfig {
-    FcitxGenericConfig gconfig;
-    int iPriority;
-} FcitxGooglePinyinConfig;
-
 typedef struct _GooglePinyinCandWord {
     int index;
 } GooglePinyinCandWord;
 
 typedef struct _FcitxGooglePinyin
 {
-    FcitxGooglePinyinConfig config;
     FcitxInstance* owner;
     iconv_t conv;
     char buf[MAX_GOOGLEPINYIN_INPUT + 1];
@@ -66,9 +60,6 @@ __EXPORT_API INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, FcitxCa
 __EXPORT_API boolean FcitxGooglePinyinInit(void*);
 __EXPORT_API void ReloadConfigFcitxGooglePinyin(void*);
 __EXPORT_API void SaveFcitxGooglePinyin(void* arg);;
-
-
-CONFIG_BINDING_DECLARE(FcitxGooglePinyinConfig);
 
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

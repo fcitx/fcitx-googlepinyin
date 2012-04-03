@@ -67,8 +67,6 @@ extern "C" {
 static void FcitxGooglePinyinUpdateCand(FcitxGooglePinyin* googlepinyin);
 static boolean DecodeIsDone(FcitxGooglePinyin* googlepinyin);
 static void GetCCandString(FcitxGooglePinyin* googlepinyin, int index);
-static boolean LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs);
-static void SaveGooglePinyinConfig(FcitxGooglePinyinConfig* fs);
 
 CONFIG_DESC_DEFINE(GetGooglePinyinConfigDesc, "fcitx-googlepinyin.desc")
 
@@ -76,7 +74,6 @@ CONFIG_DESC_DEFINE(GetGooglePinyinConfigDesc, "fcitx-googlepinyin.desc")
  * @brief Reset the status.
  *
  **/
-__EXPORT_API
 void FcitxGooglePinyinReset (void* arg)
 {
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
@@ -124,7 +121,6 @@ void TryBestSearch(FcitxGooglePinyin* googlepinyin)
  * @param count count from XKeyEvent
  * @return INPUT_RETURN_VALUE
  **/
-__EXPORT_API
 INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned int state)
 {
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
@@ -367,7 +363,6 @@ boolean FcitxGooglePinyinInit(void* arg)
  * @param searchMode
  * @return INPUT_RETURN_VALUE
  **/
-__EXPORT_API
 INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords(void* arg)
 {
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
@@ -403,7 +398,6 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWords(void* arg)
  * @param iIndex index of candidate word
  * @return the string of canidate word
  **/
-__EXPORT_API
 INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, FcitxCandidateWord* candWord)
 {
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
@@ -434,16 +428,10 @@ INPUT_RETURN_VALUE FcitxGooglePinyinGetCandWord (void* arg, FcitxCandidateWord* 
  * @param arg
  * @return successful or not
  **/
-__EXPORT_API
 void* FcitxGooglePinyinCreate (FcitxInstance* instance)
 {
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) fcitx_utils_malloc0(sizeof(FcitxGooglePinyin));
     bindtextdomain("fcitx-googlepinyin", LOCALEDIR);
-    if (!LoadGooglePinyinConfig(&googlepinyin->config))
-    {
-        free(googlepinyin);
-        return NULL;
-    }
     char* userDict = NULL;
     googlepinyin->owner = instance;
 
@@ -504,7 +492,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
                     SaveFcitxGooglePinyin,
                     ReloadConfigFcitxGooglePinyin,
                     NULL,
-                    googlepinyin->config.iPriority,
+                    5,
                     "zh_CN"
                    );
     return googlepinyin;
@@ -515,60 +503,14 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
  *
  * @return int
  **/
-__EXPORT_API
 void FcitxGooglePinyinDestroy (void* arg)
 {
     free(arg);
 }
 
-__EXPORT_API void ReloadConfigFcitxGooglePinyin(void* arg)
+void ReloadConfigFcitxGooglePinyin(void* arg)
 {
-    FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) arg;
-    LoadGooglePinyinConfig(&googlepinyin->config);
 }
-
-/**
- * @brief Load the config file for fcitx-googlepinyin
- *
- * @param Bool is reload or not
- **/
-boolean LoadGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
-{
-    FcitxConfigFileDesc *configDesc = GetGooglePinyinConfigDesc();
-    if (configDesc == NULL)
-        return false;
-
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "r", NULL);
-
-    if (!fp)
-    {
-        if (errno == ENOENT)
-            SaveGooglePinyinConfig(fs);
-    }
-    FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
-    FcitxGooglePinyinConfigConfigBind(fs, cfile, configDesc);
-    FcitxConfigBindSync(&fs->gconfig);
-
-    if (fp)
-        fclose(fp);
-
-    return true;
-}
-
-/**
- * @brief Save the config
- *
- * @return void
- **/
-void SaveGooglePinyinConfig(FcitxGooglePinyinConfig* fs)
-{
-    FcitxConfigFileDesc *configDesc = GetGooglePinyinConfigDesc();
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-googlepinyin.config", "w", NULL);
-    FcitxConfigSaveConfigFileFp(fp, &fs->gconfig, configDesc);
-    if (fp)
-        fclose(fp);
-}
-
 
 boolean DecodeIsDone(FcitxGooglePinyin* googlepinyin)
 {
