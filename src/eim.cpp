@@ -482,7 +482,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
     FcitxInstanceRegisterIM(instance,
                     googlepinyin,
                     "googlepinyin",
-                    _("GooglePinyin"),
+                    _("Google Pinyin"),
                     "googlepinyin",
                     FcitxGooglePinyinInit,
                     FcitxGooglePinyinReset,

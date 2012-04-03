@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
+# Alisha <alisha.4m@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-27 22:03+0800\n"
-"PO-Revision-Date: 2011-11-16 06:53+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2012-04-03 09:54+0800\n"
+"PO-Revision-Date: 2012-01-26 16:06+0000\n"
+"Last-Translator: Alisha <alisha.4m@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.net/projects/p/fcitx/"
-"team/zh_TW/)\n"
+"language/zh_TW/)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,18 +20,17 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 
 #: /home/saber/Develop/fcitx-googlepinyin/build/po/tmp/fcitx-googlepinyin.conf.in.h:1
+#: /home/saber/Develop/fcitx-googlepinyin/build/po/../..//src/eim.cpp:485
 msgid "Google Pinyin"
-msgstr ""
-
-# unknown
-#: /home/saber/Develop/fcitx-googlepinyin/build/po/../..//src/eim.cpp:445
-msgid "GooglePinyin"
-msgstr ""
-
-#: /home/saber/Develop/fcitx-googlepinyin/data/fcitx-googlepinyin.desc:4
-msgid "Priority of GooglePinyin"
-msgstr ""
+msgstr "Google 拼音"
 
 #: /home/saber/Develop/fcitx-googlepinyin/build/po/tmp/fcitx-googlepinyin.conf.in.h:2
 msgid "Wrapper of Google Pinyin on Android"
-msgstr ""
+msgstr "Android 上的 Google 拼音的封裝"
+
+# unknown
+#~ msgid "GooglePinyin"
+#~ msgstr "Google 拼音"
+
+#~ msgid "Priority of GooglePinyin"
+#~ msgstr "Google 拼音優先權"
