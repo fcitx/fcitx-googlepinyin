@@ -30,7 +30,7 @@ set(GOOGLEPINYIN_INCLUDE_DIR "${GOOGLEPINYIN_MAIN_INCLUDE_DIR}")
 set(GOOGLEPINYIN_LIBDIR "${PC_LIBGOOGLEPINYIN_LIBDIR}")
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(GOOGLEPINYIN  DEFAULT_MSG 
+find_package_handle_standard_args(Googlepinyin  DEFAULT_MSG 
                                   GOOGLEPINYIN_LIBRARIES
                                   GOOGLEPINYIN_MAIN_INCLUDE_DIR
                                   )
