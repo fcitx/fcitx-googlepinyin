@@ -16,7 +16,7 @@ if(GOOGLEPINYIN_INCLUDE_DIR AND GOOGLEPINYIN_LIBRARIES)
 endif(GOOGLEPINYIN_INCLUDE_DIR AND GOOGLEPINYIN_LIBRARIES)
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(PC_LIBGOOGLEPINYIN "googlepinyin >= 1.0")
+pkg_check_modules(PC_LIBGOOGLEPINYIN "googlepinyin>=1.0")
 
 find_path(GOOGLEPINYIN_MAIN_INCLUDE_DIR
           NAMES pinyinime.h
