@@ -142,6 +142,13 @@ INPUT_RETURN_VALUE FcitxGooglePinyinDoInput(void* arg, FcitxKeySym sym, unsigned
                 googlepinyin->CursorPos ++;
                 TryBestSearch(googlepinyin);
                 ime_pinyin::im_get_sps_str(&len);
+                if (googlepinyin->candNum > 0) {
+                    GetCCandString(googlepinyin, 0);
+                    if (fcitx_utf8_strlen(googlepinyin->ubuf) > MAX_GOOGLEPINYIN_HZ) {
+                        FcitxGooglePinyinDoInput(googlepinyin, FcitxKey_BackSpace, 0);
+                        return IRV_DO_NOTHING;
+                    }
+                }
                 if (len == 0 && strlen(googlepinyin->buf) == 1)
                 {
                     FcitxGooglePinyinReset(googlepinyin);

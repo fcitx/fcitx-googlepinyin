@@ -34,7 +34,8 @@
 
 #define RET_BUF_LEN 256
 #define UTF8_BUF_LEN 4096
-#define MAX_GOOGLEPINYIN_INPUT MAX_USER_INPUT
+#define MAX_GOOGLEPINYIN_INPUT 35
+#define MAX_GOOGLEPINYIN_HZ 10
 
 typedef struct _GooglePinyinCandWord {
     int index;
