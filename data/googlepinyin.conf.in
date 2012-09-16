@@ -2,6 +2,6 @@
 UniqueName=googlepinyin
 _Name=Google Pinyin
 IconName=googlepinyin
-Priority=5
+Priority=10
 LangCode=zh_CN
 Parent=fcitx-googlepinyin
