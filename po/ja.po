@@ -1,29 +1,28 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
-# Alisha <alisha.4m@gmail.com>, 2012.
+# しろう <>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 09:54+0800\n"
-"PO-Revision-Date: 2012-04-03 01:55+0000\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/fcitx/"
-"language/zh_TW/)\n"
-"Language: zh_TW\n"
+"PO-Revision-Date: 2013-04-14 03:35+0000\n"
+"Last-Translator: しろう <>\n"
+"Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: /home/saber/Develop/fcitx-googlepinyin/build/po/tmp/fcitx-googlepinyin.conf.in.h:1
 #: /home/saber/Develop/fcitx-googlepinyin/build/po/../..//src/eim.cpp:485
 msgid "Google Pinyin"
-msgstr "Google 拼音"
+msgstr "Google Pinyin"
 
 #: /home/saber/Develop/fcitx-googlepinyin/build/po/tmp/fcitx-googlepinyin.conf.in.h:2
 msgid "Wrapper of Google Pinyin on Android"
-msgstr "Android 上的 Google 拼音的封裝"
+msgstr "Androidで動くGoogle Pinyinのラッパーです"

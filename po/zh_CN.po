@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 09:54+0800\n"
-"PO-Revision-Date: 2011-11-16 06:56+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"PO-Revision-Date: 2012-04-03 01:55+0000\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: /home/saber/Develop/fcitx-googlepinyin/build/po/tmp/fcitx-googlepinyin.conf.in.h:1
 #: /home/saber/Develop/fcitx-googlepinyin/build/po/../..//src/eim.cpp:485
@@ -26,10 +26,3 @@ msgstr "Google 拼音"
 #: /home/saber/Develop/fcitx-googlepinyin/build/po/tmp/fcitx-googlepinyin.conf.in.h:2
 msgid "Wrapper of Google Pinyin on Android"
 msgstr "Android 上的 Google 拼音的封装"
-
-# unknown
-#~ msgid "GooglePinyin"
-#~ msgstr "Google 拼音"
-
-#~ msgid "Priority of GooglePinyin"
-#~ msgstr "Google 拼音的优先级"
