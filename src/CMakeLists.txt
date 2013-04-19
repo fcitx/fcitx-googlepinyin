@@ -12,9 +12,8 @@ include_directories(
     ${FCITX4_FCITX_UTILS_INCLUDE_DIRS}
 )
 
-fcitx_add_addon(fcitx-googlepinyin ${FCITX_GOOGLEPINYIN_SRCS})
-target_link_libraries(fcitx-googlepinyin
-                      ${GOOGLEPINYIN_LIBRARIES}
-                      ${LIBICONV_LIBRARIES}
-                      ${LIBINTL_LIBRARIES}
-                      )
+fcitx_add_addon_full(googlepinyin
+  SOURCES ${FCITX_GOOGLEPINYIN_SRCS}
+  LINK_LIBS ${GOOGLEPINYIN_LIBRARIES}
+            ${LIBICONV_LIBRARIES}
+            ${LIBINTL_LIBRARIES})

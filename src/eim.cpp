@@ -463,14 +463,11 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
 
 
     char* syspath = NULL;
-#if FCITX_CHECK_VERSION(4,2,1)
     /* portable detect here */
     if (getenv("FCITXDIR")) {
-        syspath = fcitx_utils_get_fcitx_path_with_filename("libdir", "sunpinyin/data");
+        syspath = fcitx_utils_get_fcitx_path_with_filename("libdir", "googlepinyin/data");
     }
-    else 
-#endif
-    {
+    else {
         syspath = strdup(GOOGLEPINYIN_LIBDIR "/googlepinyin/data/dict_pinyin.dat");
     }
     bool result = ime_pinyin::im_open_decoder(syspath, userDict);
