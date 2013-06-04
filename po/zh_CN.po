@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Xuetian Weng <wengxt@gmail.com>, 2011.
+# , 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-04-19 16:21-0400\n"
-"PO-Revision-Date: 2012-04-03 01:55+0000\n"
+"POT-Creation-Date: 2013-06-04 11:24-0400\n"
+"PO-Revision-Date: 2013-04-19 20:32+0000\n"
 "Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese (China) <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
