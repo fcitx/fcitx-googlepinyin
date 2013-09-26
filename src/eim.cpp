@@ -439,6 +439,7 @@ void* FcitxGooglePinyinCreate (FcitxInstance* instance)
 {
     FcitxGooglePinyin* googlepinyin = (FcitxGooglePinyin*) fcitx_utils_malloc0(sizeof(FcitxGooglePinyin));
     bindtextdomain("fcitx-googlepinyin", LOCALEDIR);
+    bind_textdomain_codeset("fcitx-googlepinyin", "UTF-8");
     char* userDict = NULL;
     googlepinyin->owner = instance;
 
