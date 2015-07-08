@@ -3,23 +3,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# mar well <marwell.1980@freenet.de>, 2013
+# mar well <m.wellendorf@gmx.de>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2013-06-04 11:24-0400\n"
+"POT-Creation-Date: 2015-07-08 18:01+0200\n"
 "PO-Revision-Date: 2013-05-22 06:03+0000\n"
-"Last-Translator: mar well <marwell.1980@freenet.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/fcitx/language/"
-"de/)\n"
+"Last-Translator: mar well <m.wellendorf@gmx.de>\n"
+"Language-Team: German (http://www.transifex.com/p/fcitx/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/eim.cpp:489 src/fcitx-googlepinyin.conf.in:3
+#: src/eim.cpp:490 src/fcitx-googlepinyin.conf.in:3
 msgid "Google Pinyin"
 msgstr "Google Pinyin"
 
