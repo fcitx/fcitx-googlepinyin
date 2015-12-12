@@ -1,25 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Thu Hoai <contact@bizover.net>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2015-08-03 18:01+0200\n"
+"POT-Creation-Date: 2013-06-04 11:24-0400\n"
 "PO-Revision-Date: 2013-07-30 14:55+0000\n"
 "Last-Translator: Thu Hoai <contact@bizover.net>\n"
-"Language-Team: Vietnamese (http://www.transifex.com/fcitx/fcitx/language/"
-"vi/)\n"
-"Language: vi\n"
+"Language-Team: Vietnamese (http://www.transifex.com/fcitx/fcitx/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/eim.cpp:490 src/fcitx-googlepinyin.conf.in:3
+#: src/eim.cpp:489 src/fcitx-googlepinyin.conf.in:3
 msgid "Google Pinyin"
 msgstr "Google Pinyin"
 
