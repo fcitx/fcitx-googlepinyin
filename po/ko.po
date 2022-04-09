@@ -4,14 +4,15 @@
 #
 # Translators:
 # Bon Keun Seo <scobyseo@gmail.com>, 2017
-# JungHee Lee <daemul72@gmail.com>, 2022
+# Junghee Lee <daemul72@gmail.com>, 2022
+# Junghee Lee <daemul72@gmail.com>, 2022
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-03-01 20:27+0000\n"
-"PO-Revision-Date: 2022-03-01 14:53+0000\n"
-"Last-Translator: JungHee Lee <daemul72@gmail.com>\n"
+"POT-Creation-Date: 2022-04-09 20:27+0000\n"
+"PO-Revision-Date: 2013-04-19 20:31+0000\n"
+"Last-Translator: Junghee Lee <daemul72@gmail.com>, 2022\n"
 "Language-Team: Korean (http://www.transifex.com/fcitx/fcitx/language/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -21,8 +22,8 @@ msgstr ""
 
 #: src/eim.cpp:490 src/fcitx-googlepinyin.conf.in:3
 msgid "Google Pinyin"
-msgstr "구글 병음입력"
+msgstr "구글 Pinyin입력"
 
 #: src/fcitx-googlepinyin.conf.in:4
 msgid "Wrapper of Google Pinyin on Android"
-msgstr "Android의 Google 병음 래퍼"
+msgstr "Android의 Google Pinyin 래퍼"
